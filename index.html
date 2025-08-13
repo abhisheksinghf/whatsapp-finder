@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WhatsApp Quick Chat</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    h2 { margin: 0 0 15px; text-align: center; }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    input:focus { border-color: #34B7F1; }
+    button {
+      background: #25D366;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>WhatsApp Quick Chat</h2>
+    <input type="tel" id="phone" placeholder="Enter Indian number" />
+    <button id="openBtn">Open Chat</button>
+  </div>
+
+  <script>
+    function cleanNumber(num) {
+      // Remove spaces, dashes, parentheses
+      num = num.replace(/[^\d+]/g, "").trim();
+
+      // If starts with +91, keep it
+      if (num.startsWith("+91")) {
+        num = num.replace("+", ""); // wa.me doesn't take '+'
+      }
+      // If starts with 91 without '+', keep as is
+      else if (num.startsWith("91") && num.length === 12) {
+        // already in correct format
+      }
+      // If 10-digit number, add 91
+      else if (/^\d{10}$/.test(num)) {
+        num = "91" + num;
+      } else {
+        throw new Error("Enter a valid Indian number");
+      }
+      return num;
+    }
+
+    document.getElementById("openBtn").addEventListener("click", () => {
+      const inputNum = document.getElementById("phone").value;
+      try {
+        const cleaned = cleanNumber(inputNum);
+        window.location.href = "https://wa.me/" + cleaned;
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+  </script>
+</body>
+</html>
